@@ -25,12 +25,11 @@ class FaceCrop {
         return CGRect(x: x, y: y, width: width, height: height)
     }
 
-    static func calculateCropRect(faceContext: FaceContext, imageSize: CGRect)  {
+    static func calculateCropRect(faceContext: FaceContext, imageSize: CGRect, scaleFactor : CGFloat)  {
         guard let faceRect = faceContext.faceRect else {
             return
         }
 
-        let scaleFactor = 2.5
         var scaledWidth = faceRect.size.width * scaleFactor
         var scaledHeight = faceRect.size.height * scaleFactor
         
@@ -69,7 +68,7 @@ class FaceCrop {
         faceContext.croppedImage = croppedImage
     }
 
-    static func cropHeads(_ image: CIImage, completion: @escaping ([FaceContext]) -> Void) {
+    static func cropHeads(_ image: CIImage, scaleFactor: CGFloat, completion: @escaping ([FaceContext]) -> Void) {
         let faceDetectionRequest = VNDetectFaceLandmarksRequest(completionHandler: { (request, error) in
             guard let observations = request.results as? [VNFaceObservation] else {
                 fatalError("unexpected result type from VNDetectFaceLandmarksRequest")
@@ -83,7 +82,7 @@ class FaceCrop {
                 faceContext.yaw = observation.yaw
                 faceContext.roll = observation.roll
                 faceContext.faceLandmarks = observation.landmarks
-                calculateCropRect(faceContext: faceContext, imageSize: image.extent)
+                calculateCropRect(faceContext: faceContext, imageSize: image.extent, scaleFactor: scaleFactor)
                 applyCrop(faceContext: faceContext, image: image)
                 faceContexts.append(faceContext)
             }

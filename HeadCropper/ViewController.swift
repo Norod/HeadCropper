@@ -40,7 +40,7 @@ class ViewController: NSViewController {
                 }
                 return
             }
-            FaceCrop.cropHeads(ciImage) { contexts in
+            FaceCrop.cropHeads(ciImage, scaleFactor: 2.5) { contexts in
                 var headIndex = 0
                 for faceContext in contexts {
                     let croppedImage = faceContext.croppedImage
