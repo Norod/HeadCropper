@@ -99,8 +99,7 @@ class ViewController: NSViewController {
         openPanel.canChooseFiles = true
         openPanel.canChooseDirectories = true
         openPanel.allowsMultipleSelection = false
-        openPanel.allowedFileTypes = NSImage.imageTypes
-        //openPanel.allowedContentTypes =
+        openPanel.allowedContentTypes = [.image]        
         openPanel.begin { (result) in
             if result == .OK {
                 if let urls = openPanel.urls as [URL]? {
